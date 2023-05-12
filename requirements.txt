@@ -1,0 +1,5 @@
+jupyter
+notebook
+tensorflow-intel
+keras
+numpy
