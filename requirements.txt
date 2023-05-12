@@ -3,3 +3,4 @@ notebook
 tensorflow-intel
 keras
 numpy
+matplotlib
