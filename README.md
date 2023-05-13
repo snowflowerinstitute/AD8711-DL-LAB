@@ -7,5 +7,5 @@
 5. Develop a code to design object detection and classification for traffic analysis using CNN
 6. Implement online fraud detection of share market data using any one of the data analytics tools.
 7. Implement image augmentation using deep RBM. | [Program](7-IMAGE-AUGMENTATION-RBM.ipynb) | [Dataset](https://youtu.be/dQw4w9WgXcQ)
-8. Implement Sentiment Analysis using LSTM.
+8. Implement Sentiment Analysis using LSTM. | [Program](8-SENTIMENT-ANALYSIS-LSTM.ipynb) | [Dataset](https://youtu.be/dQw4w9WgXcQ)
 9. Mini Project: Number plate recognition of traffic video analysis.
