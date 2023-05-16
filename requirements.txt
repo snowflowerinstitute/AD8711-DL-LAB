@@ -4,3 +4,5 @@ tensorflow-intel
 keras
 numpy
 matplotlib
+imblearn
+scikit-learn
