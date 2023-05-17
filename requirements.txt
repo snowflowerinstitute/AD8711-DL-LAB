@@ -6,3 +6,9 @@ numpy
 matplotlib
 imblearn
 scikit-learn
+transformers
+datasets
+torch
+torchaudio
+soundfile
+librosa
