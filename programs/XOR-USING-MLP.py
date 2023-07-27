@@ -8,7 +8,7 @@ X = [[0, 0], [0, 1], [1, 0], [1, 1]]
 y = [[0], [1], [1], [0]]
 
 model = Sequential([
-    Dense(4, input_dim=2, activation='relu'),
+    Dense(8, input_dim=2, activation='relu'),
     Dense(1, activation='sigmoid')
 ])
 
@@ -16,7 +16,7 @@ model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
-model.fit(X, y, epochs=2000, verbose=0)
+model.fit(X, y, epochs=300, verbose=0)
 
 loss, accuracy = model.evaluate(X, y, verbose=0)
 print(f"Loss: {loss:.2f}, Accuracy: {accuracy:.2f}")
