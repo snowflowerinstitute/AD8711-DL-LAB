@@ -9,7 +9,7 @@ from keras.models import Sequential
 from sklearn.model_selection import train_test_split
 
 image_width, image_height = 128, 128
-dataset_path = './datasets/3B-XRAY-CLASSIFICATION/'
+dataset_path = '../datasets/3B-XRAY-CLASSIFICATION/'
 class_names = ['NORMAL', 'PNEUMONIA']
 num_classes = len(class_names)
 
