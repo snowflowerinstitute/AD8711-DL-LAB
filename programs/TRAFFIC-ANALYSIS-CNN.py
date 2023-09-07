@@ -1,3 +1,4 @@
+import glob
 import os
 
 import matplotlib.pyplot as plt
@@ -9,20 +10,17 @@ from sklearn.model_selection import train_test_split
 
 dataset_path = '../datasets/5-TRAFFIC-ANALYSIS-CNN'
 image_width, image_height = 64, 64
-num_classes = len(os.listdir(dataset_path))
 
 X, y = [], []
-class_names = {}
+class_names = {class_name: i for i, class_name in enumerate(os.listdir(dataset_path))}
+num_classes = len(class_names)
 
-for class_name in os.listdir(dataset_path):
-    if class_name not in class_names:
-        class_names[class_name] = len(class_names)
-    class_path = os.path.join(dataset_path, class_name)
-    for image_name in os.listdir(class_path):
-        image_path = os.path.join(class_path, image_name)
-        image = load_img(image_path, target_size=(image_width, image_height))
-        image = img_to_array(image)
-        X.append(image)
+for class_name in class_names:
+    images = glob.glob(os.path.join(dataset_path, class_name, '*.jpg'))
+    for image in images:
+        img = load_img(image, target_size=(image_width, image_height))
+        img = img_to_array(img)
+        X.append(img)
         y.append(class_names[class_name])
 
 X = np.array(X) / 255.0
@@ -40,26 +38,23 @@ model = Sequential([
     Dense(num_classes, activation='sigmoid')
 ])
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.summary()
-
 model.fit(X_train, y_train, epochs=10, batch_size=32, verbose=0)
 score, acc = model.evaluate(X_test, y_test, verbose=0)
 print(f"Score: {(score * 100):.2f}% | Accuracy: {(acc * 100):.2f} %")
 
-random_indexes = np.random.choice(len(X_test), size=9)
-reverse_map = {v: k for k, v in class_names.items()}
+n = 9
+reverse_class_names = {i: class_name for class_name, i in class_names.items()}
 
-y_pred = model.predict(X_test[random_indexes], verbose=0)
-y_pred_class = [reverse_map[np.argmax(y)] for y in y_pred]
-y_test = np.argmax(y_test[random_indexes], axis=1)
-y_test_class = [reverse_map[y] for y in y_test]
+y_pred = model.predict(X_test[:9], verbose=0)
+y_pred_class = np.argmax(y_pred, axis=1)
+y_test_class = np.argmax(y_test[:9], axis=1)
 
 fig, ax = plt.subplots(3, 3, figsize=(10, 10))
-
-for i, index in enumerate(random_indexes):
-    ax[i // 3, i % 3].imshow(X_test[index])
-    ax[i // 3, i % 3].set_title(f"Predicted: {y_pred_class[i]}\nActual: {y_test_class[i]}")
+for i in range(n):
+    ax[i // 3, i % 3].imshow(X_test[i])
+    pred_class = reverse_class_names[y_pred_class[i]]
+    true_class = reverse_class_names[y_test_class[i]]
+    ax[i // 3, i % 3].set_title(f"Predicted: {pred_class}\nTrue: {true_class}")
     ax[i // 3, i % 3].axis('off')
-
 plt.tight_layout()
 plt.show()
