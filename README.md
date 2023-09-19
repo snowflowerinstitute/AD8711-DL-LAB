@@ -11,9 +11,17 @@
 |    | Implement online fraud detection of share market data using any one of the data analytics tools. | [Program](6-ONLINE-FRAUD-DETECTION.ipynb)    | [Dataset](datasets/6-creditcard.zip)               |
 |    | Implement image augmentation using deep RBM.                                                     | [Program](7-IMAGE-AUGMENTATION-RBM.ipynb)    |                                                    |
 |    | Implement Sentiment Analysis using LSTM.                                                         | [Program](8-SENTIMENT-ANALYSIS-LSTM.ipynb)   |                                                    |
-|    | Mini Project: Number plate recognition of traffic video analysis.                                | [Program](9-NUMBER-PLATE-RECOGNITION.ipynb)  | [Dataset](datasets/9-NUMBER-PLATE-RECOGNITION.zip) |
 
 # NOTE:
 
     Please extract the datasets if they are in zip format.
     For example: 3B-XRAY-CLASSIFICATION.zip should be extracted as 3B-XRAY-CLASSIFICATION folder.
+
+# Getting CUDA errors ?
+
+```python
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+```
+
+Add the above code in the first cell of the notebook to run the code on CPU.

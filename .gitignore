@@ -1,2 +1,8 @@
 /venv
 /.idea
+/.ipynb_checkpoints
+
+
+# datasets
+/datasets/3B-XRAY-CLASSIFICATION
+/datasets/5-TRAFFIC-ANALYSIS-CNN

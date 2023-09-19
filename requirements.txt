@@ -1,6 +1,6 @@
 jupyter
 notebook
-tensorflow-intel
+tensorflow
 keras
 numpy
 matplotlib
@@ -10,5 +10,4 @@ transformers
 datasets
 soundfile
 librosa
-pytesseract
 pandas
