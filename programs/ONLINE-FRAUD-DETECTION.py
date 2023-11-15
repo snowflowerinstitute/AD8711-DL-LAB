@@ -1,56 +1,31 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 from imblearn.over_sampling import SMOTE
-from keras.layers import Dense
-from keras.models import Sequential
-from sklearn.metrics import auc, precision_recall_curve
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from keras.models import Sequential
+from keras.layers import Dense
 
-df = pd.read_csv('../datasets/6-creditcard.csv')
+df = pd.read_csv('../datasets/6-FRAUD-DETECTION.csv')
+type_encoder = LabelEncoder()
+df['type'] = type_encoder.fit_transform(df['type'])
+X = df.drop('isFraud', axis=1)
+y = df['isFraud']
 
-X = df.drop('Class', axis=1)
-y = df['Class']
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=420)
-
-# Plot the imbalanced data
-class_counts = df['Class'].value_counts()
-plt.figure(figsize=(8, 6))
-plt.pie(class_counts, labels=class_counts.index, autopct='%1.1f%%', startangle=90)
-plt.title('Credit Card Fraud Class Imbalance')
-plt.axis('equal')
-plt.show()
-
-# Apply SMOTE to balance the data
-smote = SMOTE(random_state=69)
-X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
-
-# Standardize the features
 scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train_resampled)
-X_test_scaled = scaler.transform(X_test)
+X = scaler.fit_transform(X)
 
-# Plot the balanced data
-class_counts = pd.Series(y_train_resampled).value_counts()
-plt.figure(figsize=(8, 6))
-plt.pie(class_counts, labels=class_counts.index, autopct='%1.1f%%', startangle=90)
-plt.title('Credit Card Fraud Class Distribution after SMOTE')
-plt.axis('equal')
-plt.show()
+smote = SMOTE(random_state=420)
+X_train_resampled, y_train_resampled = smote.fit_resample(X, y)
 
-# Define, Compile and train the Keras model
+X_train, X_test, y_train, y_test = train_test_split(X_train_resampled, y_train_resampled,
+                                                    test_size=0.2, random_state=420)
 model = Sequential([
-    Dense(64, activation='relu', input_dim=X_train_scaled.shape[1]),
-    Dense(64, activation='relu'),
+    Dense(64, activation='relu', input_dim=X_train.shape[1]),
     Dense(1, activation='sigmoid')
 ])
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-_ = model.fit(X_train_scaled, y_train_resampled, epochs=10, batch_size=512, verbose=0)
+_ = model.fit(X_train, y_train, epochs=10, batch_size=int(1e5), verbose=0)
 
-# Calculate AUPRC
-y_pred_prob = model.predict(X_test_scaled, verbose=0)
-precision, recall, thresholds = precision_recall_curve(y_test, y_pred_prob)
-auprc = auc(recall, precision)
-print(f"AUPRC Accuracy: {(auprc * 100):.2f} %")
+loss, accuracy = model.evaluate(X_test, y_test, batch_size=int(1e5), verbose=0)
+print(f'Loss: {loss:.3f}, Accuracy: {accuracy:.3f}')
